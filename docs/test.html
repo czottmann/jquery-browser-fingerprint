@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+  <script src="https://raw.github.com/wbond/md5-js/master/md5.js"></script>
+  <script src="../src/jquery.browser-fingerprint-1.0.min.js"></script>
+  <script src="https://raw.github.com/jasonbarry/fontlist.js/master/fontlist.js"></script>
+  <script>
+    $(document).ready(function(){
+      $('#fingerprint').html($.fingerprint());
+    });
+  </script>
+</head>
+<body>
+  <p id="fingerprint"></p>
+</body>
+</html>
