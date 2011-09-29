@@ -47,7 +47,8 @@
             p.name,p.description,
             $.map( p, function(mt) { return [ mt.type, mt.suffixes ].join("~"); }).join(",")
           ].join("::");
-        }).join(";")
+        }).join(";"),
+        _fonts().join('+')
       ].join("###");
     }
 
@@ -60,6 +61,19 @@
       else {
         // If `window.md5()` isn't available, an error is thrown.
         throw "md5 unavailable, please get it from http://github.com/wbond/md5-js/";
+      }
+    }
+    
+    // `_fonts()` checks for the installed fonts on a system
+    // http://github.com/jasonbarry/fontlist.js/
+    function _fonts() {
+      if ( typeof $.fontlist === "function" ) {
+        // if fontlist.js is available, search for installed fonts
+        return $.fontlist();
+      }
+      else {
+        // else return empty array
+        return [];
       }
     }
 
