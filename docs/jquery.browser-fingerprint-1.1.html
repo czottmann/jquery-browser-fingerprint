@@ -1,0 +1,62 @@
+<!DOCTYPE html>  <html> <head>   <title>jquery.browser-fingerprint-1.1.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               jquery.browser-fingerprint-1.1.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <p>Browser fingerprinting is a technique to "mark" anonymous users using JS
+(or other things).  To build an "identity" of sorts the browser is queried
+for a list of its plugins, the screen size and several other things, then
+hashes them.  The idea is that these bits of information produce an unique
+"fingerprint" of sorts; the more elaborate the list of data points is, the
+more unique this fingerprint becomes.  And you wouldn't even need to set a
+cookie to recognize this user when she visits again.</p>
+
+<p>For more information on this topic consult
+<a href="http://arstechnica.com/tech-policy/news/2010/05/how-your-web-browser-rats-you-out-online.ars">Ars Technica</a>
+or the <a href="http://panopticlick.eff.org/">EFF</a>.  There is a lot of potential
+for undesirable shenanigans, and I strictly oppose using this technique for
+marketing and ad-related tracking purposes.</p>
+
+<p>Anyways, I needed a really simple fingerprinting library, so I wrote a
+quick and dirty jQuery plugin.  This is by no means a complete and
+watertight implementation -- it is merely the scratch for a particular itch
+I was having.  YMMV.</p>
+
+<p>This library was written by Carlo Zottmann, carlo@municode.de, has its home
+on <a href="http://github.com/carlo/jquery-browser-fingerprint">Github</a> and is
+WTF-licensed (see LICENSE.txt).</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">(</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Calling <code>jQuery.fingerprint()</code> will return an MD5 hash, i.e. said
+fingerprint.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">$</span><span class="p">.</span><span class="nx">fingerprint</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>This function, <code>_raw()</code>, uses several browser details which are
+available to JS here to build a string, namely...</p>
+
+<ul>
+<li>the user agent</li>
+<li>screen size</li>
+<li>color depth</li>
+<li>the timezone offset</li>
+<li>sessionStorage support</li>
+<li>localStorage support</li>
+<li>the list of all installed plugins (we're using their names,
+descriptions, mime types and file name extensions here)</li>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">function</span> <span class="nx">_raw</span><span class="p">()</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>That string is the return value.</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="k">return</span> <span class="p">[</span>
+        <span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">,</span>
+        <span class="p">[</span> <span class="nx">screen</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="nx">screen</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">screen</span><span class="p">.</span><span class="nx">colorDepth</span> <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>
+        <span class="p">(</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span> <span class="p">).</span><span class="nx">getTimezoneOffset</span><span class="p">(),</span>
+        <span class="o">!!</span><span class="nb">window</span><span class="p">.</span><span class="nx">sessionStorage</span><span class="p">,</span>
+        <span class="o">!!</span><span class="nb">window</span><span class="p">.</span><span class="nx">localStorage</span><span class="p">,</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">plugins</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="p">[</span>
+            <span class="nx">p</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
+            <span class="nx">p</span><span class="p">.</span><span class="nx">description</span><span class="p">,</span>
+            <span class="nx">$</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span> <span class="nx">p</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">mt</span><span class="p">)</span> <span class="p">{</span>
+              <span class="k">return</span> <span class="p">[</span> <span class="nx">mt</span><span class="p">.</span><span class="nx">type</span><span class="p">,</span> <span class="nx">mt</span><span class="p">.</span><span class="nx">suffixes</span> <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">);</span>
+            <span class="p">}).</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+          <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;::&quot;</span><span class="p">);</span>
+        <span class="p">}).</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+      <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;###&quot;</span><span class="p">);</span>
+    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p><code>_md5()</code> computes a MD5 hash using <a href="http://github.com/wbond/md5-js/">md5-js</a>.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">function</span> <span class="nx">_md5</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nb">window</span><span class="p">.</span><span class="nx">md5</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>The return value is the hashed fingerprint string.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="k">return</span> <span class="nx">md5</span><span class="p">(</span> <span class="nx">_raw</span><span class="p">()</span> <span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">else</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>If <code>window.md5()</code> isn't available, an error is thrown.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="k">throw</span> <span class="s2">&quot;md5 unavailable, please get it from http://github.com/wbond/md5-js/&quot;</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p>And, since I'm lazy, calling <code>$.fingerprint()</code> will return the hash
+right away, without the need for any other calls.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">return</span> <span class="nx">_md5</span><span class="p">();</span>
+  <span class="p">}</span>
+
+<span class="p">})(</span><span class="nx">jQuery</span><span class="p">);</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
