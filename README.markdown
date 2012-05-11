@@ -8,7 +8,8 @@ hashes them.  The idea is that these bits of information produce an unique
 more unique this fingerprint becomes.  And you wouldn't even need to set a
 cookie to recognize this user when she visits again.
 
-For more information on this topic consult [Ars Technica](http://arstechnica.com/tech-policy/news/2010/05/how-your-web-browser-rats-you-out-online.ars)
+For more information on this topic consult
+[Ars Technica](http://arstechnica.com/tech-policy/news/2010/05/how-your-web-browser-rats-you-out-online.ars)
 or the [EFF](http://panopticlick.eff.org/).  There is a lot of potential
 for undesirable shenanigans, and I strictly oppose using this technique for
 marketing and ad-related tracking purposes.

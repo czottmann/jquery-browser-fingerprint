@@ -5,8 +5,9 @@
 // "fingerprint" of sorts; the more elaborate the list of data points is, the
 // more unique this fingerprint becomes.  And you wouldn't even need to set a
 // cookie to recognize this user when she visits again.
-// 
-// For more information on this topic consult [Ars Technica](http://arstechnica.com/tech-policy/news/2010/05/how-your-web-browser-rats-you-out-online.ars)
+//
+// For more information on this topic consult
+// [Ars Technica](http://arstechnica.com/tech-policy/news/2010/05/how-your-web-browser-rats-you-out-online.ars)
 // or the [EFF](http://panopticlick.eff.org/).  There is a lot of potential
 // for undesirable shenanigans, and I strictly oppose using this technique for
 // marketing and ad-related tracking purposes.
@@ -17,23 +18,25 @@
 // I was having.  YMMV.
 //
 // This library was written by Carlo Zottmann, carlo@municode.de, has its home
-// @ [Github](http://github.com/carlo/jquery-browser-fingerprint) and is
+// on [Github](http://github.com/carlo/jquery-browser-fingerprint) and is
 // WTF-licensed (see LICENSE.txt).
 
-// Let's not bleed into the global namespace here...
 ( function($) {
 
   // Calling `jQuery.fingerprint()` will return an MD5 hash, i.e. said
   // fingerprint.
+
   $.fingerprint = function() {
-  
-    // This function, `_raw()`, uses several browser details which are 
+
+    // This function, `_raw()`, uses several browser details which are
     // available to JS here to build a string, namely...
     //
     // * the user agent
     // * screen size
     // * color depth
     // * the timezone offset
+    // * sessionStorage support
+    // * localStorage support
     // * the list of all installed plugins (we're using their names,
     //    descriptions, mime types and file name extensions here)
     function _raw() {
@@ -42,10 +45,15 @@
         navigator.userAgent,
         [ screen.height, screen.width, screen.colorDepth ].join("x"),
         ( new Date() ).getTimezoneOffset(),
+        !!window.sessionStorage,
+        !!window.localStorage,
         $.map( navigator.plugins, function(p) {
           return [
-            p.name,p.description,
-            $.map( p, function(mt) { return [ mt.type, mt.suffixes ].join("~"); }).join(",")
+            p.name,
+            p.description,
+            $.map( p, function(mt) {
+              return [ mt.type, mt.suffixes ].join("~");
+            }).join(",")
           ].join("::");
         }).join(";")
       ].join("###");
@@ -67,6 +75,5 @@
     // right away, without the need for any other calls.
     return _md5();
   }
-  
-})(jQuery);
 
+})(jQuery);
