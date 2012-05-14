@@ -45,7 +45,6 @@
         navigator.userAgent,
         [ screen.height, screen.width, screen.colorDepth ].join("x"),
         ( new Date() ).getTimezoneOffset(),
-        !!window.sessionStorage,
         !!window.localStorage,
         $.map( navigator.plugins, function(p) {
           return [
